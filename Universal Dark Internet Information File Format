@@ -1,0 +1,185 @@
+What should the e2ee protocol do?
+
+    It should provide a standardized identity protocol
+    It should consist of a post quantum key encapsulation algorithm, and a set of keypairs.
+    It must not place complete trust in one algorithm, but many.
+    It must be generic so that any plaintext can be encrypted over any protocol. (Email, Text Messaging, Telegram, Signal, Activitypub etc)
+    It must be futureproof.
+
+Let us start with the identity key.
+We will start with crystals-kyber-1024 as a key encapsulation algorithm. To get to 4096 bits, four seperate Crystals-Kyber-1024 keys will be used one after another. As a check each key will be verified with Crystals-Dilithium-5, FalconSign-1024 and SPINCS+-Shake256 to verify its legitimacy. Each key server the key complete public key and signature is uploaded to will verify each of the signatures and then attach its own signature so that the propagation of the identity through the global keyserver network can be verified.
+Now let us cover the assymetric keys protected by the Key Encapsulation Mechanism.
+We will use 4 separate keys, four in a row. NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple NIST-B571(plaintext)))))
+Each certificate shall list no less than 16 but all implementations must be able to parse up to 42 public keys generated using this method. Each Public key will be triple signed using NTRUsign-32768, RSAsign-32768, ECDSA-32768 and then hashed with SHA3-512, Keyed Blake3-512, Keyed Skein-512 with an internal state size of 1024 and Keyed MD6-512 for message integrity.
+What about symmetric keys?
+When symmetric keys need to be exchanged, they are sent over the same protocol that messages are sent over. The required symmetric Ciphers are AES-256, Anubis-320, Kalyna-512, Threefish-1024 and verified with SHA3-512, Keyed Blake3-512, Keyed MD6-512 and Keyed Skein-512 an internal state size of 1024. No symmetric key may be used more than once and must be depreciated once the session, whether audio, video call, file transfer or secure drop is over.
+How do we look up keys?
+For this purpose we use a keyserver. Each keyserver is part of the fediverse and must support Activitypub, Ostatus, Zot and Diaspora, of which the specifications are listed at https://www.w3.org/TR/activitypub/, https://github.com/OStatus, https://zotlabs.org/help/en/developer/zot_protocol and https://github.com/diaspora/diaspora_federation. Support for Matrix, Zsync, CURL, GNU Wget, Authenticated Transfer Protocol, GNUNET and Freenet/Locutus smart contract are recommended but not required. I recommend that all of these be considered, but due to the emerging nature of GNUNET, Authenticated Transfer Protocol and Freenet/Locutus we ought to wait until these networks are stable and audited. Various implementations should implement Matrix, Zsync, CURL and GNU Wget as needed.
+How do we revoke keys?
+In order to revoke a key, either the identity's expiration date passes and the keyservers mark it as expired, use with extreme caution or the private key is derived. If the private key is compromised for either the Quadruple Crystals-Kyber-1024 identity, the Digital Signatures, The 16 secondary keys or any other part of the identity is compromised. Once the identity is compromised, anyone with a valid identity can challenge the key. If the private key they submitted to challenge the public key, then the entire identity is revoked and the owner is notified effective immediately. The private key is propagated across the network and every keyserver that receives it must display it as proof that the key is compromised and the key must be treated as compromised and unusable whenever it is requested.
+How do I prove I own the key?
+Simple, the keyserver will send you a message encrypted using your key encapsulation key, each of your secondary keys and a direct message using each of the required symmetric encryption algorithms. You will decript the message, verify it, and then send the message back using the identity key of the keyserver for each email address, phone number, RCS, MMS, SMS, Signal, iMessage, Matrix, Activitypub, Ostatus, Zot, Diaspora, Telegram, Nextcloud, Google Drive, Onedrive, ProtonDrive, Mega Cloud Storage, iCloud, S3 Bucket, FTP server, Contact form or any protocol not listed in the other section of your keypair by completing the round robin.
+What does this identity key look like?
+"""
+Begin Universal Dark Internet Identity Information File:
+RealName:[First_Middle1_Middle2_Middle3_Middle4_Last]
+Handle:[Handle1, Handle2, Handle3, Handle4, Handle5]
+Nickname:[Nickname1, Nickname2, Nickname3, Nickname4, Nickname5]
+House Phone:[+X-XXX-XXX-XXXX--callerID] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Work Phone:Phone:[+X-XXX-XXX-XXXX--callerID] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Smartphone:[+X-XXX-XXX-XXXX--callerID] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+VOIP Phone:[+X-XXX-XXX-XXXX--callerID] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Feature Phone:[+X-XXX-XXX-XXXX--callerID] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Proxy Phone:[+X-XXX-XXX-XXXX--callerID] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Home Email:[emailaddress@emailserver.tld--sendername] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Work Email:[emailaddress@emailserver.tld--sendername] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Personal Email:[emailaddress@emailserver.tld--sendername] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Formal Personal Email:[emailaddress@emailserver.tld--sendername] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
+Begin Dark Internet Identity Key Encapsulation Mechanism
+Four Rounds of Crystals-Kyber-1024
+
+    Crystals-Kyber-1024
+    Crystals-Kyber-1024
+    Crystals-Kyber-1024
+    Crystals-Kyber-1024
+    Three Digital Signatures
+    Crystals-Dilithium5
+    FalconSign-1024
+    SPINCS+-Shake256
+    Three Cryptographic Hash Functions
+    Unkeyed SHA3-512
+    Keyed Blake3-512
+    Keyed MD6-512
+    Keyed Skein-512 using an internal state size of 1024
+    Begin Secondary Assymetric Complete Public Keysets
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    End Complete Assymetric Public Keysets
+    Begin Keyset Digital Signature Sets
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
+    End Digital Signature sets
+    Begin Accepted Symmetric Ciphers
+    AES-256=True, Anubis-320=True, Kalyna-512=True, Threefish-1024=True, Camellia-256=True/False, CAST6=True/False, RC6-256=True/False, Kuznyechik-256=True/False, Twofish-256=True/False
+    End Accepted Symmetric Ciphers
+    Begin Keyserver Attestation:
+    KeyserverURL--TLS1.3/EncryptedClientHelloCertificate--DNSSEC key--DANE key--DKIM key--Certificate Authority Autheorization Certificate--3rd Party Keyserver endorsements--webmaster URL-Corporate Entity Identifier--Crystals-Dilithium5 Digital Signature--FalconSign-1024 Digital Signature--SPINCS+-Shake256 Digital Signature--SecureDrop Quadruple-Kyber-1024 Public key--SecureDrop Quadruple Dilithium5 Digital Signature--SecureDrop Identity File URL--SecureDrop URL
+    KeyserverURL--TLS1.3/EncryptedClientHelloCertificate--DNSSEC key--DANE key--DKIM key--Certificate Authority Autheorization Certificate--3rd Party Keyserver endorsements--webmaster URL-Corporate Entity Identifier--Crystals-Dilithium5 Digital Signature--FalconSign-1024 Digital Signature--SPINCS+-Shake256 Digital Signature--SecureDrop Quadruple-Kyber-1024 Public key--SecureDrop Quadruple Dilithium5 Digital Signature--SecureDrop Identity File URL--SecureDrop URL
+    Repeat for each keyserver this Dark Internet Identity File passes though once each and every keyserver attestation is computed to be legitimate. No more 32768 keyserver attestations unless the identity file specifices a smaller number
+    End keyserver Attestation
+    Begin Additional Configuration
+    Maximum Keyserver Attestation Number = 32768 (default)
+    Expiration Date = TodaysDate() + 1 Leap Year Cycle (default, can be indefinite and longer or shorter)
+    User Agent = [Key Generator Programming Language] [Key Generator Compiler] [Key Generator Written by: (Copyright)(SPDX License Header)(Asignee)(Project)] [Key Generator Compiled by: (Copyright)(SPDX License Header)(Asignee)(Project)] [Key Generated on: (Operating System)(Version Number)(Copyright)(Asignee)(SPDX License Header)(OS Compiled By)(OS distributed by)]
+    Gold Certification = [True/False--SPDX License Header--Source Code Download URL--Copyright--Assignee--Project--Website URL--Release Number--Version Control Tag--Digital Signature--Digital Signature Type--List of Dependencies]
+    Silver Certification = [True/False--SPDX License Header--Version Control Release Header--Version Control Tag Header--Sworn Affadavit URL linked to Release Header--Sworn Affadavit URL linked to Tag Header--Warrent Canary Signed and Dated to the Release Announcement URL]
+    Begin Memory Safety Certification:
+    Access errors: invalid read/write of a pointer [True/False]
+        Buffer overflow – out-of-bound writes can corrupt the content of adjacent objects, or internal data (like bookkeeping information for the heap) or return addresses. [True/False]
+        Buffer over-read – out-of-bound reads can reveal sensitive data or help attackers bypass address space layout randomization. [True/False]
+        Race condition – concurrent reads/writes to shared memory [True/False]
+        Invalid page fault – accessing a pointer outside the virtual memory space. A null pointer dereference will often cause an exception or program termination in most environments, but can cause corruption in operating system kernels or systems without memory protection, or when use of the null pointer involves a large or negative offset. [True/False]
+        Use after free – dereferencing a dangling pointer storing the address of an object that has been deleted. [True/False]
+    Uninitialized variables – a variable that has not been assigned a value is used. It may contain an undesired or, in some languages, a corrupt value. [True/False]
+        Null pointer dereference – dereferencing an invalid pointer or a pointer to memory that has not been allocated [True/False]
+        Wild pointers arise when a pointer is used prior to initialization to some known state. They show the same erratic behaviour as dangling pointers, though they are less likely to stay undetected. [True/False]
+    Memory leak – when memory usage is not tracked or is tracked incorrectly [True/False]
+        Stack exhaustion – occurs when a program runs out of stack space, typically because of too deep recursion. A guard page typically halts the program, preventing memory corruption, but functions with large stack frames may bypass the page. [True/False]
+        Heap exhaustion – the program tries to allocate more memory than the amount available. In some languages, this condition must be checked for manually after each allocation. [True/False]
+        Double free – repeated calls to free may prematurely free a new object at the same address. If the exact address has not been reused, other corruption may occur, especially in allocators that use free lists. [True/False]
+        Invalid free – passing an invalid address to free can corrupt the heap. [True/False]
+        Mismatched free – when multiple allocators are in use, attempting to free memory with a deallocation function of a different allocator [True/False]
+        Unwanted aliasing – when the same memory location is allocated and modified twice for unrelated purposes [True/False]
+    End Memory Safety Certification
+    Version #: Alpha1
+    End Universal Dark Internet Identity Information File
+    """
+    Notes
+    ** The identity headers assocated with the phone numbers and email are both to confirm and to deny these identities. If the identity is not included than it shall be treated as the right to remain silent.
+    ** Additional Phone numbers and emails are allowed, but the phone numbers and emails listed in the template must be parsable in order for the implementation to be compliant
+    ** A complaint implementation shall be referred to as compliant. Implementations available as free software under the open source definition shall be referred to as gold compliant and stable releases accompanied by a sworn affadavit that there are no known backdoors, intentional vurnrability, no deliberate zero days and that the programmers are not under a gag order, investigation or otherwise forced to implement a backdoor from the time of the previous release announcement to the current stable release announcement shall be referred to as silver compliant.
+    ** This end to end encryption negotiation protocol is not meant to bave any protocol of its own, rather it is meant as a generic and universal protocol for privacy, security and anonmity over any other protocol where these features are required.
+    ** When encrypting email, the plaintext is encrypted in the MIME format used by the email service and the subject header and any attachments is encrypted using a symmetric key contained somewhere in the ciphertext with the plaintext of email with the format [symmetriccipher-subject header/attachment-filename.extension] depending on where what is being encrypted. Only the sender's and recipiants supported keys may be used.
+    ** When sending over instant messengers, the same protocol is used except that the subject-header may be replaced with groupchat-header when neccessary.
+    ** Compression may be used with Dark Internet Identity Information e2ee encryption. LZMA2, Zlib, and ZSTD with LZ4 support are required on any of their standard presets. Roshal Archives compliant with the latest stable release of winrar are allowed so long as a GNU Affero GPL v3 or later implementation exists which supports all of the standard Winrar Roshal Archive Presets. The source available proprietary UnRar must not be required for extracting the compressed message, nor may Rar or Winrar be required to pack compressed messages. Google Brotli, Deflate, LZ77, LZ78, Apple LZFSE and LZHAM are optional but recommended.
+    ** The Dark Internet Identity Information File must be human readable as plaintext, but should be convertable into libexpat Compatible XML and ECMA-404 JavaScript Object Notation Format.
