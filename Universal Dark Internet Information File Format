@@ -9,7 +9,7 @@ What should the e2ee protocol do?
 Let us start with the identity key.
 We will start with crystals-kyber-1024 as a key encapsulation algorithm. To get to 4096 bits, four seperate Crystals-Kyber-1024 keys will be used one after another. As a check each key will be verified with Crystals-Dilithium-5, FalconSign-1024 and SPINCS+-Shake256 to verify its legitimacy. Each key server the key complete public key and signature is uploaded to will verify each of the signatures and then attach its own signature so that the propagation of the identity through the global keyserver network can be verified.
 Now let us cover the assymetric keys protected by the Key Encapsulation Mechanism.
-We will use 4 separate keys, four in a row. NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple NIST-B571(plaintext)))))
+We will use 4 separate keys, five in a row. NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple NIST-B571(plaintext))))))
 Each certificate shall list no less than 16 but all implementations must be able to parse up to 42 public keys generated using this method. Each Public key will be triple signed using NTRUsign-32768, RSAsign-32768, ECDSA-32768 and then hashed with SHA3-512, Keyed Blake3-512, Keyed Skein-512 with an internal state size of 1024 and Keyed MD6-512 for message integrity.
 What about symmetric keys?
 When symmetric keys need to be exchanged, they are sent over the same protocol that messages are sent over. The required symmetric Ciphers are AES-256, Anubis-320, Kalyna-512, Threefish-1024 and verified with SHA3-512, Keyed Blake3-512, Keyed MD6-512 and Keyed Skein-512 an internal state size of 1024. No symmetric key may be used more than once and must be depreciated once the session, whether audio, video call, file transfer or secure drop is over.
@@ -37,7 +37,6 @@ Personal Email:[emailaddress@emailserver.tld--sendername] Protocol[True/False--u
 Formal Personal Email:[emailaddress@emailserver.tld--sendername] Protocol[True/False--username--homeserver] Account[True/False--username--homeserver] Activitypub[True/False--handle--homeserver] Ostatus:[True/False--handle--homeserver] Zot:[True/False--handle--homeserver] Diaspora:[True/False--handle--homeserver] Matrix:[True/False--handle--homeserver] Authenticated Transfer Protocol:[True/False--handle--homeserver]Email:[True/False--emailaddress--emailserver] iMessage:[True/False--username--imessageserver] RCS:[True/False--username--rcsserver] MMS[True/False--username--mmsserver] SMS:[True/False--username--homeserver] Signal:[True/False--username--signalserver] Telegram:[True/False--username-telegramserver]
 Begin Dark Internet Identity Key Encapsulation Mechanism
 Four Rounds of Crystals-Kyber-1024
-
     Crystals-Kyber-1024
     Crystals-Kyber-1024
     Crystals-Kyber-1024
@@ -52,48 +51,49 @@ Four Rounds of Crystals-Kyber-1024
     Keyed MD6-512
     Keyed Skein-512 using an internal state size of 1024
     Begin Secondary Assymetric Complete Public Keysets
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
-    NTRU-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message)))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(CLassic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Clsssic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
+    NTRU-32768(Classic McElice-32768(RSA-32768(Quadruple-NIST-P521(Quadruple-NIST-B571(message))))))
     End Complete Assymetric Public Keysets
     Begin Keyset Digital Signature Sets
     NTRUsign-32768--RSAsign-32768-ECDSA-32768---Unkeyed SHA3-512--Keyed Blake3-512--Keyed MD6-512--Keyed Skien-512 with an internal state size of 1024
@@ -171,7 +171,28 @@ Four Rounds of Crystals-Kyber-1024
         Mismatched free – when multiple allocators are in use, attempting to free memory with a deallocation function of a different allocator [True/False]
         Unwanted aliasing – when the same memory location is allocated and modified twice for unrelated purposes [True/False]
     End Memory Safety Certification
-    Version #: Alpha1
+    Begin Backwards Compatibility Section:
+    ** Each of these algorithms must support RSA-4096+, NTRU-4096+, NIST-P521, NIST-B571, AES-256, Anubis-320, Kalyna-512, Threefish-1024, SHA3-512, Blake3-512, MD6-512, Skien-512 using an internal state size of 1024, RSAsign-4096+, NTRUsign-4096+, ECDSA-4096+ and the standard ciphersuites for PGP, S/MIME and Privacy Enhanced Mail.
+    ** PGP shall be interpreted as RFC 4880, RFC 3156, RFC 6637, RFC 6091, RFC 5581, RFC 7929, XEP-0373, XEP-0374 and the active IETF drafts at https://datatracker.ietf.org/doc/draft-koch-openpgp-webkey-service/ and https://datatracker.ietf.org/doc/draft-ietf-openpgp-crypto-refresh/ to be treated as optional until ratified and given an official RFC number.
+    ** No obselete or expired RFCs or Drafts will ever be supported here. They are listed at https://www.openpgp.org/about/standard/
+    ** The OpenPGP standard is located at https://www.openpgp.org/about/standard/.
+    Begin PGP Complete Public Keyset
+
+    End Pretty Good Privacy Complete Public Keyset
+    ** S/MIME shall be interpreted as RFC 8551, also known as Secure Multipupose Mail Extensions 4.0. It can be found at https://www.rfc-editor.org/rfc/rfc8551.
+    Begin S/MIME Complete Public Keyset
+
+    End Secure Multipurpose Internet Mail Extensions Complete Public Keyset
+    Privacy Enhanced Mail shall be interpreted as RFC 7468 and this section will be used for end to end encryption protocols using the privacy enhanced mail based complete public keyset format that are does not implement OpenPGP or S/MIME.
+    Start Privacy Enhanced Mail Complete Public Keyset
+
+    End Privacy Enhanced Mail Complete Public Keyset
+    Dark Internet Mail Enviroment shall refer to the Dark Internet Mail Enviroment June 2018 Specification or any later version published and ratified by the Dark Internet Mail Alliance. The June 2018 specification is located at https://darkmail.info/downloads/dark-internet-mail-environment-june-2018.pdf.
+    Begin Dark Internet Mail Enviroment Complete Public Keyset
+
+    End Dark Internet Mail Enviroment Complete Public Keyset
+    Version #: Alpha2
+    ** Each Standard listed in this backwards compatibility section must always implement the latest ratified IETF specification of OpenPGP, S/MIME, Privacy Enhanced Mail, Dark Internet Mail Enviroment and any required or optional dependent IETF RFCs and must never implement any obseleted or depreciated specification.
     End Universal Dark Internet Identity Information File
     """
     Notes
@@ -183,3 +204,15 @@ Four Rounds of Crystals-Kyber-1024
     ** When sending over instant messengers, the same protocol is used except that the subject-header may be replaced with groupchat-header when neccessary.
     ** Compression may be used with Dark Internet Identity Information e2ee encryption. LZMA2, Zlib, and ZSTD with LZ4 support are required on any of their standard presets. Roshal Archives compliant with the latest stable release of winrar are allowed so long as a GNU Affero GPL v3 or later implementation exists which supports all of the standard Winrar Roshal Archive Presets. The source available proprietary UnRar must not be required for extracting the compressed message, nor may Rar or Winrar be required to pack compressed messages. Google Brotli, Deflate, LZ77, LZ78, Apple LZFSE and LZHAM are optional but recommended.
     ** The Dark Internet Identity Information File must be human readable as plaintext, but should be convertable into libexpat Compatible XML and ECMA-404 JavaScript Object Notation Format.
+    Bibliography:
+    1. [1] S. Josefsson, S. Leonard, Penango, Inc., and SDJ AB, “RFC 7468: Textual encodings of PKIX, PKCS, and CMS Structures,” IETF Datatracker, https://datatracker.ietf.org/doc/html/rfc7468 (accessed Nov. 16, 2023). 
+    2. [2] J. Schaad et al., “RFC 8551: Secure/multipurpose internet mail extensions (S/MIME) version 4.0 message specification,” IETF Datatracker, https://datatracker.ietf.org/doc/html/rfc8551 (accessed Nov. 16, 2023).
+    3. [3] “OpenPGP Standard Component RFCs and XEPs,” OpenPGP Working Group Offical Website, https://www.openpgp.org/about/standard/ (accessed Nov. 16, 2023). The Links to each and every RFC and XEP that composes the OpenPGP standard is linked to from here.
+    4. [4] L. Levison and Lavabit LLC, Dark Internet Mail Enviroment June 2018 Specification, https://darkmail.info/downloads/dark-internet-mail-environment-june-2018.pdf (accessed Nov. 17, 2023). I would like to dedicate this project to the National Security Agency. For better or worse, good or evil, what
+follows would not have been created without you. Because sometimes upholding constitutional ideas just isn’t
+enough; sometimes you have to uphold the actual Constitution. May god bless these United States of America.
+May she once again become the land of the free and home of the brave. Ledar Levison
+    5. [5] I. T. L. Computer Security Division, “Selected algorithms 2022 - post-quantum cryptography: CSRC,” CSRC, https://csrc.nist.gov/Projects/post-quantum-cryptography/selected-algorithms-2022 (accessed Nov. 16, 2023). The Crystals ciphersuite, FalconSign and SPINCS+ algorithms are specified here. These specifications are binding on Post Quantum Privacy and the Universal Dark Internet Identity File Format.
+    6. [6] I. T. L. Computer Security Division, “Round 4 submissions - post-quantum cryptography: CSRC,” CSRC, https://csrc.nist.gov/Projects/post-quantum-cryptography/round-4-submissions (accessed Nov. 16, 2023).  The Classic McElice algorithm is specified here, this classic McElice Specification is binding on Post Quantum Privacy and the Dark Internet Identity File Format.
+    7. [7] I. T. L. Computer Security Division, “Round 3 submissions - post-quantum cryptography: CSRC,” CSRC, https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-3-submissions (accessed Nov. 16, 2023). The NTRU specification is listed here. This NTRU specification listed here is binding on Post Quantum Privacy and the Dark Internet Identity File Format.
+    8. [8] K. Moriarty et al., “PKCS #1: RSA cryptography specifications version 2.2,” RFC Editor, https://www.rfc-editor.org/rfc/rfc8017.html (accessed Nov. 16, 2023). This is the RSA Cryptosystem specification that is binding on Post Quantum Privacy and the Universal Dark Internet Identity Information File Format.
